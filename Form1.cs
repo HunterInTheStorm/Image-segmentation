@@ -84,5 +84,18 @@ namespace WindowsFormsApp2
            
         }
 
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            pictureBox2.Location = new Point((int)(0.05 * (float)this.Width), (int)(0.3 * (float)this.Height));
+            pictureBox2.Width = (int)(0.4 * this.Width);
+            pictureBox2.Height = (int)(0.3 * this.Height);
+            //pictureBox2.Refresh();
+
+            pictureBox1.Location = new Point(pictureBox2.Width + (int)(0.1 * (float)this.Width), (int)(0.3 * (float)this.Height));
+            pictureBox1.Width = (int)(0.4 * this.Width);
+            pictureBox1.Height = (int)(0.3 * this.Height);
+            //pictureBox1.Refresh();
+
+        }
     }
 }

@@ -99,6 +99,7 @@ namespace WindowsFormsApp2
         private byte segmentNumber;
         private List<MyPixel> SegList;
         private List<MyPixel> arrP;
+
         public ImageSegmentor(byte num = 0)
         {
             this.SegList = new List<MyPixel>();
@@ -124,8 +125,10 @@ namespace WindowsFormsApp2
             GetPixelData(image);
             SetSegments();
             CalcSegmentation();
-            SegmentImage();            
-            return CreateNewBitmap(image);
+            SegmentImage();
+            Bitmap img = CreateNewBitmap(image);
+            DelocateMemory();
+            return img;
         }
 
         private void GetPixelData(Bitmap image)
@@ -190,7 +193,7 @@ namespace WindowsFormsApp2
             {
                 averageP[i] = new MyPixelAvrg(i);
             }
-
+            int counter = 20 * this.segmentNumber;
             while (!isReady)
             {
                 isReady = true;
@@ -208,6 +211,7 @@ namespace WindowsFormsApp2
                     MyPixelAvrg temp = averageP[SegmentIndex];
                     temp.AddToColor(arrP[i]);
                     averageP[SegmentIndex] = temp;
+                    counter--;
                 }
 
                 for (int i = 0; i < SegList.Count; i++)
@@ -275,6 +279,12 @@ namespace WindowsFormsApp2
             }
             image.UnlockBits(imgData);
             return new Bitmap(image.Width, image.Height, imgData.Stride, System.Drawing.Imaging.PixelFormat.Format24bppRgb, System.Runtime.InteropServices.Marshal.UnsafeAddrOfPinnedArrayElement(rgb, 0));
+        }
+        
+        private void DelocateMemory()
+        {
+            this.arrP.Clear();
+            this.SegList.Clear();
         }
     }
 }
